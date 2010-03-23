@@ -141,3 +141,7 @@ Payloads are JSON structures (not arrays). Example payload from "luser" sending 
     "default_project" => "danopia/fbi" # or nil
 
 Note that the payload will not be sent unless the command 1) addressed or PM'ed an FBI IRC bot and 2) didn't have a handler set up in the bot process itself.
+
+Error handling
+--------------
+The easiest way to describe the protocol-level error handling is that there isn't one. There will be soon. I have to decide whether there will be an "error" action which includes the invalid request or whether the bad packet will be relayed back with "error":true or some other thing. I am, however, leaning towards the former.
