@@ -21,6 +21,21 @@ Defined actions in this early spec are: welcome, auth, subscriptions, components
 
 Many packets try to include an 'origin' or 'target'. Later on this will likely become a packet-wide requirement.
 
+Here is an example conversation, where << denotes packets which the component received and >> denotes packets which the component sent.
+
+    ** component connects to router
+    << {"name":"Development FBI Router","action":"welcome","origin":"$home.danopia.net"}
+    >> {"action":"auth","user":"irc","secret":"hil0l"}
+    << {"action":"auth","origin":"irc","user":"www"}
+    >> {"action":"subscribe","channels":["#commits","#test"]}
+    << {"action":"subscribe","origin":"irc","channels":["#commits","#test"]}
+    >> {"data":{"test":"hello world"},"action":"publish","target":"#test"}
+    << {"data":{"test":"hello world"},"origin":"irc","action":"publish","target":"#irc"}
+    >> {"data":{"test":"hello world"},"action":"publish","target":"#irc"}
+    ** nothing is received to ACK the publish
+    << {"action":"disconnect"}
+    << {"action":"disconnect","origin":"irc"}
+    ** router closes connection
 
 Defined actions
 ---------------
@@ -51,6 +66,8 @@ Sent by the component to request that the server connection be closed cleanly. A
 
 #### publish data, target
 Publish a data payload (which should be a JSON hash structure) to the specified target. Prefixes are used to determine if the target is a channel or component, allowing you to publish data directly to certain components. The publishing component's name is stored under 'origin'. The packet is then relayed to all recipients (via a channel subscription list or direct target).
+
+If a component publishes to a channel to which it also subscribes, then the router will also relay the packet back to the origin to serve as a type of acknowledgement.
 
 ### Introspection
 
