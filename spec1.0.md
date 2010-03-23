@@ -33,7 +33,7 @@ Here is an example conversation, where << denotes packets which the component re
     << {"data":{"test":"hello world"},"origin":"irc","action":"publish","target":"#irc"}
     >> {"data":{"test":"hello world"},"action":"publish","target":"#irc"}
     ** nothing is received to ACK the publish
-    << {"action":"disconnect"}
+    >> {"action":"disconnect"}
     << {"action":"disconnect","origin":"irc"}
     ** router closes connection
 
